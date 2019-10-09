@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<style>
+			body {
+				background-color: rgb(49, 127, 245);
+				margin: 0px;
+				position: relative;
+			}
+			#centered {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				text-align: center;
+				color: gainsboro;
+				font-family: 'Courier New', Courier, monospace;
+			}
+			#centered h {
+				font-size: 8vw;
+			}
+			#centered h2 {
+				font-size: 4vw;
+				margin: 3 0 3 0;
+			}
+			#centered input {
+				width: 30vw;
+				height: 6vh;
+				font-size: 5vw;
+				border: 0;
+			}
+			.answer {
+				/* padding: 0px;
+				border: 0px; */
+			}
+		</style>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/w/index.js"></script>
+	</head>
+	<body>
+		<div id="centered">
+			<div id="join-session">
+				<h>Room Code:</h><br/>
+				<input id="room-code" type="number"/><br/>
+				<script>
+					document.getElementById("room-code").addEventListener("keypress", (event) => {
+						if (event.keyCode === 13) {
+							joinSession(document.getElementById("room-code").value);
+						}
+					});
+				</script>
+				<button onclick="joinSession(document.getElementById('room-code').value)">Join</button>
+			</div>
+			<div id="join-players" style="display: none;">
+				<h>Join Players</h>
+				<h2>Player Count:</h2><input id="player-count" type="number" max="100" min="1" value="10"/>
+				<h2>Prefix:</h2><input id="player-prefix" type="text"/>
+				<h2>Suffix:</h2><input id="player-suffix" type="text"/>
+				<h2>Space Character:</h2><input id="player-space-chars" type="text" value="0"/><br/>
+				<button onclick="joinPlayers()">Join Players</button>
+			</div>
+			<div id="answer" onload="updateAnswerSizes()" style="display: none;">
+				<script>
+					window.addEventListener("keypress", (event) => {
+						if (document.getElementById("answer").style.display !== "none") {
+							let c = event.keyCode;
+							let answer = (c === 117 ?
+								0 :
+								(c >= 105 && c <= 107 ?
+									c-104 :
+									-1
+								)
+							)
+							if (c !== -1) {
+								socket.emit('answer', answer);
+							}
+						}
+					});
+				</script>
+				<h>Press u, i, j, or k to answer</h>
+			</div>
+		</div>
+	</body>
+</html>
