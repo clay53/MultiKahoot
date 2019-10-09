@@ -10,8 +10,6 @@ const kahootAPI = require('kahoot-api');
 const Session = kahootAPI.Session;
 const Adapters = kahootAPI.Adapters;
 
-const session = new Session(108421);
-
 async function joinPlayers(session, count, prefix="", suffix="", spaceChar="0") {
     return new Promise(async function (resolve, reject) {
         if (prefix.length+suffix.length+(spaceChar.length > 0 ? spaceChar.length : 1)*count.toString().length <= 15) {
